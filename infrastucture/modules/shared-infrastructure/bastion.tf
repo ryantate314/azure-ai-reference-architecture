@@ -23,7 +23,7 @@ resource "azurerm_bastion_host" "bastion" {
 
   ip_configuration {
     name = "configuration"
-    subnet_id = azurerm_subnet.bastion.id
+    subnet_id = module.vnet_hub.subnets["bastion"].id
     public_ip_address_id = azurerm_public_ip.bastion[0].id
   }
 }
@@ -42,7 +42,7 @@ resource "azurerm_network_interface" "jump_box" {
 
   ip_configuration {
     name                          = "primary"
-    subnet_id                     = azurerm_subnet.jump_box.id
+    subnet_id                     = module.vnet_hub.subnets["jump_box"].id
     private_ip_address_allocation = "Dynamic"
   }
 }

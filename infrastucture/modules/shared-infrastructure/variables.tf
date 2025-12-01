@@ -10,11 +10,14 @@ variable resource_group_name {
   default     = "ai-foundry-reference-architecture"
 }
 
+variable resource_group_id {
+  description = "The resource group ID to deploy resources into."
+  type        = string
+}
+
 variable ip_ranges {
   type = object({
     virtual_network = string
-    app_service_integration = string
-    private_endpoint = string
     bastion = string
     jump_box = string
   })
