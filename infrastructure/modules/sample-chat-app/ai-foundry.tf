@@ -1,3 +1,9 @@
+resource "random_string" "ai_foundry" {
+  length = 6
+  special = false
+  upper = false
+}
+
 module "ai_foundry" {
   source = "azure/avm-ptn-aiml-ai-foundry/azurerm"
   version = "0.7.0"
@@ -13,7 +19,7 @@ module "ai_foundry" {
   enable_telemetry = false
 
   ai_foundry = {
-    name = "aif-${var.workload}-${var.environment}"
+    name = "aif-${var.workload}-${var.environment}-${random_string.ai_foundry.result}"
     disable_local_auth = true
   }
 

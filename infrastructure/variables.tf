@@ -1,7 +1,7 @@
 variable "location" {
   description = "The Azure region to deploy resources into."
   type        = string
-  default     = "East US"
+  default     = "Central US"
 }
 
 variable "subscription_id" {
