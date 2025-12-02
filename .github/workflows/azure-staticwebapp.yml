@@ -26,7 +26,7 @@ on:
 env:
   APP_LOCATION: "src/sample-chat-app/ui/" # location of your client code
   # API_LOCATION: "api" # location of your api source code - optional
-  APP_ARTIFACT_LOCATION: "dist/sample-web-app/browser" # location of client code build output
+  APP_ARTIFACT_LOCATION: "dist/sample-chat-app/browser" # location of client code build output
   AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # secret containing deployment token for your static web app
 
 permissions:
@@ -49,6 +49,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ${{ env.APP_LOCATION }}/package-lock.json
 
       - name: Install Dependencies
         run: |
@@ -71,7 +73,7 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match you app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: ${{ format('{0}{1}', env.APP_LOCATION, env.APP_ARTIFACT_LOCATION) }}
+          app_location: 'src/sample-chat-app/ui/dist/sample-chat-app/browser'
           output_location: "" 
           # api_location: ${{ env.API_LOCATION }}
           # app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
