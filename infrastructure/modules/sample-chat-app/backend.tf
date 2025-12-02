@@ -39,6 +39,12 @@ module "storage_account" {
   enable_telemetry = false
 }
 
+resource "azurerm_role_assignment" "dev_storage_account" {
+  scope                = module.storage_account.resource_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azuread_group.devs.object_id
+}
+
 module "server_farm" {
   source = "Azure/avm-res-web-serverfarm/azurerm"
   version = "1.0.0"

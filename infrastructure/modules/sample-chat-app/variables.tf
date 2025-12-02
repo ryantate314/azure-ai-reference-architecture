@@ -32,3 +32,8 @@ variable "hub_vnet_id" {
   description = "The resource ID of the hub virtual network to peer with."
   type        = string
 }
+
+variable "security_group_name" {
+  description = "The name of the security group to grant development access."
+  type        = string
+}
