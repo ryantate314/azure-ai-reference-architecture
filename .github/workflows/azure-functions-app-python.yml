@@ -21,6 +21,9 @@ name: Deploy Python project to Azure Function App
 on:
   push:
     branches: ["main"]
+    paths:
+      - "src/sample-chat-app/api/**"
+      - ".github/workflows/azure-functions-app-python.yml"
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'webapp-samplechatapp-dev'   # set this to your function app name on Azure
