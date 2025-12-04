@@ -14,3 +14,12 @@ resource "azurerm_role_assignment" "github_website_contributor" {
   role_definition_name = "Website Contributor"
   principal_id         = azurerm_user_assigned_identity.github.principal_id
 }
+
+resource "azurerm_federated_identity_credential" "github_backend_webapp" {
+  name                = "fic-github-webapp-${var.workload}-${var.environment}"
+  resource_group_name = azurerm_resource_group.main.name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = "https://token.actions.githubusercontent.com"
+  parent_id           = azurerm_user_assigned_identity.github.id
+  subject             = "repo:ryantate314/azure-ai-reference-architecture:ref:refs/heads/main"
+}

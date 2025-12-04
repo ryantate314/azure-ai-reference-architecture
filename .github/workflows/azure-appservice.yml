@@ -40,10 +40,8 @@ jobs:
         with:
           name: python-app
           path: |
-            pushd src/sample-chat-app/api
-            .
+            src/sample-chat-app/api
             !antenv/
-            popd
 
       # 🚫 Opting Out of Oryx Build
       # If you prefer to disable the Oryx build process during deployment, follow these steps:

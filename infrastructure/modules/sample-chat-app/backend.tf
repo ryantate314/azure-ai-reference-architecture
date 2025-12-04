@@ -7,6 +7,9 @@ module "webapp_backend" {
   resource_group_name = azurerm_resource_group.main.name
   kind = "webapp"
   os_type = "Linux"
+  webdeploy_publish_basic_authentication_enabled = false
+  scm_publish_basic_authentication_enabled = false
+  ftp_publish_basic_authentication_enabled = false
   # function_app_uses_fc1 = true
   # fc1_runtime_name = "python"
   # fc1_runtime_version = "3.12"
@@ -36,10 +39,12 @@ module "webapp_backend" {
 
   enable_telemetry = false
 
-  virtual_network_subnet_id = module.vnet_main.subnets["app_service_plan"].resource_id
+  # virtual_network_subnet_id = module.vnet_main.subnets["app_service_plan"].resource_id
   site_config = {
     vnet_route_all_enabled = true
+    app_command_line = "startup.sh"
   }
+  
 }
 
 # resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
