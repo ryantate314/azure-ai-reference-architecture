@@ -28,6 +28,17 @@ module "vnet_main" {
         }
       }]
     }
+    # app_integration = {
+    #   name = "snet-appintegration"
+    #   address_prefixes = [var.ip_ranges["app_integration"]]
+    #   default_outbound_access_enabled = false
+    #   delegations = [{
+    #     name = "delegation"
+    #     service_delegation = {
+    #       name = "Microsoft.App/environments"
+    #     }
+    #   }]
+    # }
   }
 
   peerings = {

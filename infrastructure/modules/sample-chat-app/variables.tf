@@ -25,6 +25,7 @@ variable "ip_ranges" {
     virtual_network = string
     private_endpoints = string
     app_service_plan = string
+    app_integration = string
   })
 }
 

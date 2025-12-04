@@ -35,6 +35,7 @@ module "sample_chat_app" {
     virtual_network      = "10.1.0.0/16"
     private_endpoints    = "10.1.0.0/24"
     app_service_plan = "10.1.1.0/24"
+    app_integration = "10.1.2.0/24"
   }
   hub_vnet_id = module.shared_infrastructure.vnet_hub.id
   security_group_name = "Cloud Developers"
