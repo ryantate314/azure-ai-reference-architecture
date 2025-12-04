@@ -39,4 +39,5 @@ module "sample_chat_app" {
   }
   hub_vnet_id = module.shared_infrastructure.vnet_hub.id
   security_group_name = "Cloud Developers"
+  repo_name = var.repo_name
 }

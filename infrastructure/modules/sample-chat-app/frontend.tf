@@ -6,5 +6,9 @@ module "frontend" {
   location = var.location
   resource_group_name = azurerm_resource_group.main.name
 
+  app_settings = {
+    API_URL = module.webapp_backend.resource_uri
+  }
+
   enable_telemetry = false
 }

@@ -21,5 +21,5 @@ resource "azurerm_federated_identity_credential" "github_backend_webapp" {
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
   parent_id           = azurerm_user_assigned_identity.github.id
-  subject             = "repo:ryantate314/azure-ai-reference-architecture:ref:refs/heads/main"
+  subject             = "repo:${var.repo_name}:ref:refs/heads/main"
 }

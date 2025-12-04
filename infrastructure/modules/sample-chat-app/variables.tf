@@ -38,3 +38,8 @@ variable "security_group_name" {
   description = "The name of the security group to grant development access."
   type        = string
 }
+
+variable "repo_name" {
+  description = "The GitHub repository name for federated identity credential."
+  type        = string
+}
