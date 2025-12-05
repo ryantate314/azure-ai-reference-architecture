@@ -23,3 +23,14 @@ resource "azurerm_federated_identity_credential" "github_backend_webapp" {
   parent_id           = azurerm_user_assigned_identity.github.id
   subject             = "repo:${var.repo_name}:ref:refs/heads/main"
 }
+
+module "ai_foundry" {
+  source = "./modules/ai-foundry"
+
+  location            = var.location
+  resource_group_id = azurerm_resource_group.main.id
+  workload            = var.workload
+  environment         = var.environment
+  tags                = var.tags
+  private_endpoint_subnet_id = module.vnet_main.subnets["private_endpoints"].resource_id
+}

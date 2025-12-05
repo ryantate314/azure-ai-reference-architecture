@@ -7,6 +7,7 @@ module "vnet_main" {
   location = var.location
   parent_id = azurerm_resource_group.main.id
   address_space = [var.ip_ranges["virtual_network"]]
+  enable_telemetry = false
 
   subnets = {
     private_endpoints = {
