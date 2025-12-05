@@ -4,6 +4,7 @@ locals {
     version = "2024-11-20"
     format  = "OpenAI"
   }
+  project_name = "project1"
 }
 
 resource "random_string" "ai_foundry" {
@@ -51,8 +52,8 @@ module "ai_foundry" {
   }
 
   ai_projects = {
-    "project1" = {
-      name = "project1"
+    (local.project_name) = {
+      name = local.project_name
       display_name = "Project 1"
       description = "First AI Foundry Project"
     }

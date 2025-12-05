@@ -31,7 +31,7 @@ module "webapp_backend" {
   }
 
   app_settings = {
-    LLM_ENDPOINT = module.ai_foundry.model_endpoint
+    LLM_ENDPOINT = module.ai_foundry.project_endpoint
   }
 }
 
