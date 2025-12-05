@@ -12,7 +12,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Azure Identity requires a newer version of the cryptography package, so use Ubuntu 20.04
+    # https://learn.microsoft.com/en-us/answers/questions/2278075/getting-version-glibc-2-33-not-found-on-http-trigg
+    runs-on: ubuntu-20.04
     permissions:
       contents: read #This is required for actions/checkout
 
