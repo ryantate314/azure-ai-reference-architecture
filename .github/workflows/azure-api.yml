@@ -12,6 +12,7 @@ jobs:
     name: Deploy Container App to Azure
     permissions:
       contents: read #This is required for actions/checkout
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Login to Azure
