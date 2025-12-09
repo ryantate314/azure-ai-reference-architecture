@@ -2,15 +2,19 @@ from fastapi import FastAPI, Form, Request, status
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from greeter import Greeter
+from .helpers.greeter import Greeter
 import os
 import dotenv
+from pathlib import Path
 
 dotenv.load_dotenv()
 
+# Get the directory where main.py is located
+BASE_DIR = Path(__file__).resolve().parent
+
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 greeter = Greeter(endpoint=os.environ.get("LLM_ENDPOINT"))
 
@@ -22,7 +26,7 @@ async def index(request: Request):
 @app.get('/favicon.ico')
 async def favicon():
     file_name = 'favicon.ico'
-    file_path = './static/' + file_name
+    file_path = BASE_DIR / 'static' / file_name
     return FileResponse(path=file_path, headers={'mimetype': 'image/vnd.microsoft.icon'})
 
 @app.post('/hello', response_class=HTMLResponse)
