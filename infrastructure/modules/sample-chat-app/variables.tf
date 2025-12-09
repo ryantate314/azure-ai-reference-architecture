@@ -26,6 +26,7 @@ variable "ip_ranges" {
     private_endpoints = string
     app_service_plan = string
     app_integration = string
+    agents_egress = string
   })
 }
 

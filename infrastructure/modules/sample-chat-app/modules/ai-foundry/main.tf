@@ -1,62 +1,68 @@
-locals {
-  ai_model = {
-    name    = "gpt-4o"
-    version = "2024-11-20"
-    format  = "OpenAI"
-  }
-  project_name = "project1"
-}
-
-resource "random_string" "ai_foundry" {
+resource "random_string" "resource_token" {
   length = 6
   special = false
   upper = false
 }
 
-module "ai_foundry" {
-  source = "azure/avm-ptn-aiml-ai-foundry/azurerm"
-  version = "0.7.0"
+locals {
+  default_foundry_name = "aif-${var.workload}-${var.environment}-${random_string.resource_token.result}"
+  ai_foundry_name = var.resource_name != null ? var.resource_name : local.default_foundry_name
+  use_managed_identity = var.managed_identity_id != null
+}
 
-  base_name = "sample"
-  location = var.location
-  resource_group_resource_id = var.resource_group_id
+resource "azurerm_cognitive_account" "ai_foundry" {
+  name                = local.ai_foundry_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  kind                = "AIServices"
 
-  create_private_endpoints = true
-  private_endpoint_subnet_resource_id = var.private_endpoint_subnet_id
-  
-  # don't share data with Microsoft
-  enable_telemetry = false
+  local_auth_enabled = false
 
-  ai_foundry = {
-    name = "aif-${var.workload}-${var.environment}-${random_string.ai_foundry.result}"
-    disable_local_auth = true
+  public_network_access_enabled = var.use_private_endpoints ? false : true
+
+  identity {
+    type = local.use_managed_identity ? "UserAssigned" : "SystemAssigned"
+    identity_ids = local.use_managed_identity ? [var.managed_identity_id] : null
   }
 
-  resource_names = {
+  sku_name = var.ai_foundry_sku
 
+  # required for stateful development in Foundry including agent service
+  custom_subdomain_name = local.ai_foundry_name
+  project_management_enabled = true
+
+  tags = var.tags
+}
+
+resource "azurerm_cognitive_deployment" "deployment" {
+  for_each = var.model_deployments
+
+  name                 = each.value.name
+  cognitive_account_id = azurerm_cognitive_account.ai_foundry.id
+
+  sku {
+    name     = each.value.sku_name
+    capacity = each.value.sku_capacity
   }
 
-  ai_model_deployments = {
-    "gpt-4o" = {
-      name = local.ai_model.name
-      model = {
-        format = local.ai_model.format
-        name = local.ai_model.name
-        version = local.ai_model.version
-      }
-      scale = {
-        type = "Standard"
-        capacity = 50
-      }
-    }
+  model {
+    format  = each.value.format
+    name    = each.value.name
+    version = each.value.version
   }
+}
 
-  ai_projects = {
-    (local.project_name) = {
-      name = local.project_name
-      display_name = "Project 1"
-      description = "First AI Foundry Project"
-    }
+resource "azurerm_private_endpoint" "ai_foundry" {
+  name                = "pe-aif-${var.workload}-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.private_endpoint_subnet_id
+
+  private_service_connection {
+    name                           = "psc-aif-${var.workload}-${var.environment}"
+    private_connection_resource_id = azurerm_cognitive_account.ai_foundry.id
+    is_manual_connection           = false
+    subresource_names              = ["account"]
   }
 
   tags = var.tags
