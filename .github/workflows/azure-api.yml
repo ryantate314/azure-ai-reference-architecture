@@ -15,6 +15,11 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
+      - name: Debug - Show Client ID prefix
+        run: |
+          CLIENT_ID="${{ secrets.AZURE_CLIENT_ID }}"
+          echo "Client ID starts with: ${CLIENT_ID:0:8}..."
+
       - name: Login to Azure
         uses: azure/login@v2
         with:

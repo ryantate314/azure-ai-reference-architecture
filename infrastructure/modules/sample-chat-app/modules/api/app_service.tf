@@ -9,7 +9,7 @@ module "webapp_backend" {
   resource_group_name = var.resource_group_name
   kind = "webapp"
   os_type = "Linux"
-  service_plan_resource_id = azurerm_service_plan.backend.id
+  service_plan_resource_id = azurerm_service_plan.backend[0].id
   virtual_network_subnet_id = var.app_service_plan_subnet_id
 
   webdeploy_publish_basic_authentication_enabled = false
@@ -17,7 +17,7 @@ module "webapp_backend" {
   ftp_publish_basic_authentication_enabled = false
 
   managed_identities = {
-    user_assigned_resource_ids = [azurerm_user_assigned_identity.backend.id]
+    user_assigned_resource_ids = [azurerm_user_assigned_identity.backend[0].id]
   }
 
 
@@ -35,6 +35,8 @@ module "webapp_backend" {
 }
 
 resource "azurerm_user_assigned_identity" "backend" {
+  count = var.type == "appservice" ? 1 : 0
+
   name                = "id-st-${var.workload}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -62,6 +64,8 @@ resource "random_string" "storage_account" {
 # }
 
 resource "azurerm_service_plan" "backend" {
+  count = var.type == "appservice" ? 1 : 0
+
   name                = "plan-${var.workload}-${var.environment}-2"
   resource_group_name = var.resource_group_name
   location            = var.location
