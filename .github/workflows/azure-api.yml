@@ -10,6 +10,8 @@ jobs:
   deploy_container_app:
     runs-on: ubuntu-latest
     name: Deploy Container App to Azure
+    permissions:
+      contents: read #This is required for actions/checkout
 
     steps:
       - name: Login to Azure
