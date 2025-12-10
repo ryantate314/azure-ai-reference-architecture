@@ -6,6 +6,7 @@ resource "azurerm_linux_web_app" "backend_container" {
   location            = var.location
   service_plan_id     = azurerm_service_plan.backend_container[0].id
   vnet_image_pull_enabled = true
+  virtual_network_subnet_id = var.app_service_plan_subnet_id
 
   site_config {
     always_on = false

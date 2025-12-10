@@ -8,9 +8,14 @@ output "system_assigned_identity_id" {
   value       = local.use_managed_identity ? null : azurerm_cognitive_account.ai_foundry.identity[0].principal_id
 }
 
-output "endpoint_url" {
+output "openai_endpoint_url" {
   description = "The endpoint URL for the deployed AI model."
-  value       = "https://${azurerm_cognitive_account.ai_foundry.name}.services.ai.azure.com/"
+  value       = "https://${azurerm_cognitive_account.ai_foundry.name}.openai.azure.com/"
+}
+
+output "cognitiveservices_endpoint_url" {
+  description = "The endpoint URL for the deployed AI model."
+  value       = "https://${azurerm_cognitive_account.ai_foundry.name}.cognitiveservices.azure.com/"
 }
 
 output "model_deployment_ids" {

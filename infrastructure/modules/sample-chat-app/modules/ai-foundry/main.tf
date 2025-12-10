@@ -53,6 +53,8 @@ resource "azurerm_cognitive_deployment" "deployment" {
 }
 
 resource "azurerm_private_endpoint" "ai_foundry" {
+  count = var.use_private_endpoints ? 1 : 0
+
   name                = "pe-aif-${var.workload}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -63,6 +65,11 @@ resource "azurerm_private_endpoint" "ai_foundry" {
     private_connection_resource_id = azurerm_cognitive_account.ai_foundry.id
     is_manual_connection           = false
     subresource_names              = ["account"]
+  }
+
+  private_dns_zone_group {
+    name = "dns-zone-group"
+    private_dns_zone_ids = var.private_dns_zone_ids
   }
 
   tags = var.tags

@@ -196,3 +196,17 @@ resource "azurerm_subnet_network_security_group_association" "ai_agents_nsg_asso
   subnet_id                 = module.vnet_main.subnets["ai_agents"].resource_id
   network_security_group_id = azurerm_network_security_group.ai_agents.id
 }
+
+# Private DNS Zones
+resource "azurerm_private_dns_zone" "cognitiveservices" {
+  name                = "privatelink.cognitiveservices.azure.com"
+  resource_group_name = azurerm_resource_group.main.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "cognitiveservices_link" {
+  name                  = "link-cognitiveservices-${var.workload}-${var.environment}"
+  resource_group_name   = azurerm_resource_group.main.name
+  private_dns_zone_name = azurerm_private_dns_zone.cognitiveservices.name
+  virtual_network_id    = module.vnet_main.resource_id
+  registration_enabled  = false
+}

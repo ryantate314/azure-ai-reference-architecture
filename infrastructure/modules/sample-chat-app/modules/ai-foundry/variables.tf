@@ -47,6 +47,12 @@ variable "private_endpoint_subnet_id" {
   }
 }
 
+variable "private_dns_zone_ids" {
+  description = "The ids of the private DNS zones to link with the private endpoint."
+  type        = list(string)
+  default     = []
+}
+
 variable "ai_foundry_sku" {
   description = "The SKU for the AI Foundry resource."
   type        = string

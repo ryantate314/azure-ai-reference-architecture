@@ -12,13 +12,16 @@ class Greeter:
 
   def greet(self, name: str) -> str:
     try:
-      response = self.client.responses.create(
+      response = self.client.chat.completions.create(
         model="gpt-4o",
-        input=f"Generate a greeting message for {name}."
+        messages=[
+          {"role": "system", "content": "You are a friendly assistant that generates warm greeting messages."},
+          {"role": "user", "content": f"Generate a greeting message for {name}."}
+        ]
       )
     except Exception as e:
       print("Error during LLM call: " + str(e))
       return "Hello, " + name + "! (Error generating greeting message.)"
-    return response.output_text
+    return response.choices[0].message.content
 
     
