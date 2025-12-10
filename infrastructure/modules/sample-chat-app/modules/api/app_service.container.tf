@@ -27,6 +27,7 @@ resource "azurerm_linux_web_app" "backend_container" {
 
   app_settings = {
     LLM_ENDPOINT = var.llm_endpoint
+    AZURE_CLIENT_ID = var.user_assigned_acr_identity_client_id
   }
 }
 
