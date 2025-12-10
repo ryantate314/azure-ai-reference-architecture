@@ -1,14 +1,14 @@
-from azure.identity import DefaultAzureCredential
-from azure.ai.projects import AIProjectClient
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import AzureOpenAI
 
 class Greeter:
   def __init__(self, endpoint):
-    self.project = AIProjectClient(
-      endpoint=endpoint,  # Replace with your endpoint
-      credential=DefaultAzureCredential()
+    token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
+    self.client = AzureOpenAI(
+      api_version = "2024-12-01-preview",
+      azure_endpoint=endpoint,
+      azure_ad_token_provider=token_provider
     )
-    self.client = self.project.get_openai_client(api_version="2024-12-01-preview")
-    print("Base Url: " + str(self.client.base_url))
 
   def greet(self, name: str) -> str:
     try:

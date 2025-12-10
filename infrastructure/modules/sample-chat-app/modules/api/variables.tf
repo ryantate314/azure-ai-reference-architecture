@@ -48,9 +48,11 @@ variable "docker_registry_url" {
 variable "user_assigned_identity_id" {
   description = "The ID of the user assigned identity for the app service"
   type        = string
+  default = null
 }
 
 variable "user_assigned_acr_identity_client_id" {
   description = "The client ID of the user assigned identity for ACR access"
   type        = string
+  default = null
 }

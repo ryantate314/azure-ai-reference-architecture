@@ -23,6 +23,10 @@ async def index(request: Request):
     print('Request for index page received')
     return templates.TemplateResponse('index.html', {"request": request})
 
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
 @app.get('/favicon.ico')
 async def favicon():
     file_name = 'favicon.ico'

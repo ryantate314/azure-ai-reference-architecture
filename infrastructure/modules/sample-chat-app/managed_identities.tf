@@ -28,17 +28,17 @@ resource "azurerm_federated_identity_credential" "github_backend_webapp" {
 }
 
 # Backend API User Assigned Identity
-resource "azurerm_user_assigned_identity" "backend_container" {
-  name                = "uai-${var.workload}-${var.environment}"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.main.name
-}
+# resource "azurerm_user_assigned_identity" "backend_container" {
+#   name                = "uai-${var.workload}-${var.environment}"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.main.name
+# }
 
-resource "azurerm_role_assignment" "acr_pull" {
-  scope                = azurerm_container_registry.main.id
-  role_definition_name = "AcrPull"
-  principal_id         = azurerm_user_assigned_identity.backend_container.principal_id
-}
+# resource "azurerm_role_assignment" "acr_pull" {
+#   scope                = azurerm_container_registry.main.id
+#   role_definition_name = "AcrPull"
+#   principal_id         = module.api.system_assigned_identity_id
+# }
 
 resource "azurerm_user_assigned_identity" "api" {
   name                = "uai-api-${var.workload}-${var.environment}"
@@ -49,5 +49,11 @@ resource "azurerm_user_assigned_identity" "api" {
 resource "azurerm_role_assignment" "ai_foundry_access" {
   scope                = module.ai_foundry.resource_id
   role_definition_name = "Cognitive Services User"
+  principal_id         = azurerm_user_assigned_identity.api.principal_id
+}
+
+resource "azurerm_role_assignment" "api_acr_pull" {
+  scope                = azurerm_container_registry.main.id
+  role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.api.principal_id
 }

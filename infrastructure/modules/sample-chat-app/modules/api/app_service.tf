@@ -16,9 +16,9 @@ module "webapp_backend" {
   scm_publish_basic_authentication_enabled = false
   ftp_publish_basic_authentication_enabled = false
 
-  managed_identities = {
-    user_assigned_resource_ids = [azurerm_user_assigned_identity.backend[0].id]
-  }
+  # managed_identities = {
+  #   user_assigned_resource_ids = [azurerm_user_assigned_identity.backend[0].id]
+  # }
 
 
   enable_telemetry = false

@@ -8,6 +8,7 @@ resource "azurerm_linux_web_app" "backend_container" {
   vnet_image_pull_enabled = true
 
   site_config {
+    always_on = false
     vnet_route_all_enabled = true
 
     container_registry_use_managed_identity = true
@@ -20,8 +21,8 @@ resource "azurerm_linux_web_app" "backend_container" {
   }
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = [var.user_assigned_identity_id]
+    type         = var.user_assigned_identity_id != null ? "UserAssigned" : "SystemAssigned"
+    identity_ids = var.user_assigned_identity_id != null ? [var.user_assigned_identity_id] : []
   }
 
   app_settings = {
